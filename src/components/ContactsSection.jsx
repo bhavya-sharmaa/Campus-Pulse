@@ -1,4 +1,3 @@
-import React from 'react';
 import { CONTACTS_DATA } from './contactsData';
 
 export default function ContactsSection({ handleCopyPhone }) {

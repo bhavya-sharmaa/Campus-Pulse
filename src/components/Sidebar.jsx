@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Sidebar({ activeTab, setActiveTab, mobileOpen, setMobileOpen }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
@@ -11,7 +9,7 @@ export default function Sidebar({ activeTab, setActiveTab, mobileOpen, setMobile
 
   const handleNavClick = (tabId) => {
     setActiveTab(tabId);
-    setMobileOpen(false); 
+    setMobileOpen(false);
   };
 
   return (

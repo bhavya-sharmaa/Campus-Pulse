@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from './components/Sidebar';
-import MapSection from './components/MapSection';
+import { useState, useEffect } from 'react';
+import Sidebar from './components/SideBar';
+import MapSection from './components/mapsection';
 import GuideMapSection from './components/GuideMapSection';
 import ScheduleSection from './components/ScheduleSection';
 import LoginSection from './components/LoginSection';
@@ -50,13 +50,11 @@ export default function App() {
       setLoginError('Please enter both Email and Password.');
       return;
     }
-    
-    // Accept standard test login or any valid credentials for ease of assignment checking
+
     if (email === 'student@chitkara.edu.in' && password === 'password123') {
       setIsLoggedIn(true);
       setLoginError('');
     } else if (email.includes('@') && password.length >= 6) {
-      // Soft backup to accept other student emails
       setIsLoggedIn(true);
       setLoginError('');
     } else {
@@ -64,18 +62,16 @@ export default function App() {
     }
   };
 
-  // Handle logout
+  const handleCopyPhone = (phone, name) => {
+    navigator.clipboard.writeText(phone);
+    alert(`Copied phone number for ${name} to clipboard!`);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     setEmail('');
     setPassword('');
     setActiveTab('dashboard');
-  };
-
-  // Copy number helper
-  const handleCopyPhone = (phone, name) => {
-    navigator.clipboard.writeText(phone);
-    alert(`Copied phone number for ${name} to clipboard!`);
   };
 
   const renderContent = () => {
@@ -95,101 +91,43 @@ export default function App() {
     }
   };
 
-  // Render unified App container with conditional views and global ambient tools
+  if (!isLoggedIn) {
+    return <LoginSection email={email} setEmail={setEmail} password={password}
+      setPassword={setPassword} loginError={loginError} handleLogin={handleLogin} />;
+  }
+
   return (
     <div className="app-container">
-      {!isLoggedIn ? (
-        <LoginSection
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          loginError={loginError}
-          handleLogin={handleLogin}
-        />
-      ) : (
-        <>
-          {/* Mobile Hamburger menu */}
-          <button
-            className="mobile-menu-toggle mobile-menu-toggle-btn"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? '✕' : '☰'}
-          </button>
-
-          {/* Sidebar Navigation */}
-          <Sidebar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            mobileOpen={mobileOpen}
-            setMobileOpen={setMobileOpen}
-          />
-
-          {/* Main Content Page Container */}
-          <div className="main-wrapper">
-            {/* Top Header Bar */}
-            <header className="top-bar">
-              {/* Left: Mobile Sidebar trigger button overlay */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="mobile-hamburger-btn mobile-hamburger-trigger"
-              >
-                ☰
-              </button>
-
-              {/* Center/Left: Search Bar */}
-              <div className="search-box">
-                <span className="search-icon">🔍</span>
-                <input
-                  type="text"
-                  className="search-input"
-                  placeholder="Search map details, classrooms, blocks..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="clear-search-btn"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-
-              {/* Right: Time clock + Theme switch + Logout */}
-              <div className="top-bar-right">
-                <div className="pulse-time">
-                  <span>{time}</span>
-                </div>
-
-                <button
-                  className="theme-toggle-btn"
-                  onClick={() => setIsDark(!isDark)}
-                  title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                >
-                  {isDark ? '☀️' : '🌙'}
-                </button>
-
-                <button
-                  className="theme-toggle-btn logout-btn"
-                  onClick={handleLogout}
-                  title="Logout from Account"
-                >
-                  🚪
-                </button>
-              </div>
-            </header>
-
-            {/* Content Workspace */}
-            <main className="content-body">
-              {renderContent()}
-            </main>
+      <button className="mobile-menu-toggle mobile-menu-toggle-btn"
+        onClick={() => setMobileOpen(!mobileOpen)}>
+        {mobileOpen ? '✕' : '☰'}
+      </button>
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab}
+        mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <div className="main-wrapper">
+        <header className="top-bar">
+          <button onClick={() => setMobileOpen(!mobileOpen)}
+            className="mobile-hamburger-btn mobile-hamburger-trigger">☰</button>
+          <div className="search-box">
+            <span className="search-icon">🔍</span>
+            <input type="text" className="search-input"
+              placeholder="Search map details, classrooms, blocks..."
+              value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} />
+            {searchQuery && <button onClick={() => setSearchQuery('')}
+              className="clear-search-btn">✕</button>}
           </div>
-        </>
-      )}
-
-      {/* Ambient background glow blobs */}
+          <div className="top-bar-right">
+            <div className="pulse-time"><span>{time}</span></div>
+            <button className="theme-toggle-btn" onClick={() => setIsDark(!isDark)}
+              title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}>
+              {isDark ? '☀️' : '🌙'}
+            </button>
+            <button className="theme-toggle-btn logout-btn" onClick={handleLogout}
+              title="Logout from Account">🚪</button>
+          </div>
+        </header>
+        <main className="content-body">{renderContent()}</main>
+      </div>
       <div className="bg-glow-blob blob-1" />
       <div className="bg-glow-blob blob-2" />
       <div className="bg-glow-blob blob-3" />

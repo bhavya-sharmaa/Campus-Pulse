@@ -1,4 +1,3 @@
-import React from 'react';
 import { CAMPUS_SPOTS } from './campusSpots';
 
 export default function GuideMapSection({ setActiveTab }) {

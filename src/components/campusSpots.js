@@ -1,4 +1,4 @@
-// Static Campus Spots Directory Data
+
 export const CAMPUS_SPOTS = [
   {
     id: 'spot-1',
