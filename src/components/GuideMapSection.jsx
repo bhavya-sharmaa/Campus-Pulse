@@ -33,7 +33,6 @@ export default function GuideMapSection({ setActiveTab }) {
             <thead>
               <tr>
                 <th className="guidemap-rank-header">Rank</th>
-                <th className="guidemap-circle-header">Map Circle No.</th>
                 <th>Location / Facility Name</th>
                 <th>Campus Block Location</th>
                 <th className="guidemap-lookup-header">Directory Lookup</th>
