@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { DEPARTMENTS, CATEGORIES, POPULAR_TAGS, CATEGORY_META } from './departmentsData';
 
-export default function DashboardSection({ setActiveTab }) {
+export default function DashboardSection({ setActiveTab, currentUser, onRoute }) {
   return (
     <div className="dashboard-wrapper">
       <div className="section-header">
@@ -12,7 +12,7 @@ export default function DashboardSection({ setActiveTab }) {
       {/* Quick Hero */}
       <div className="glass-card dashboard-hero-card">
         <h3 className="dashboard-hero-title">
-          Hey there, Student! 👋
+          Hey there, {currentUser ? currentUser.fullName : 'Student'}! 👋
         </h3>
         <p className="dashboard-hero-desc">
           CampusPulse helps you manage your weekly study sessions and navigate the campus. Track your AIML-3-G9 classes, customize schedules, view operational details of libraries and dispensaries, or check hostel gate curfew timings.
@@ -82,14 +82,14 @@ export default function DashboardSection({ setActiveTab }) {
       </div>
 
       {/* ── University Directory Section ── */}
-      <UniversityDirectory />
+      <UniversityDirectory onRoute={onRoute} />
     </div>
   );
 }
 
 
-/* ─────────────── University Directory ─────────────── */
-function UniversityDirectory() {
+
+function UniversityDirectory({ onRoute }) {
   const [search, setSearch]       = useState('');
   const [category, setCategory]   = useState('all');
   const [activeTag, setActiveTag] = useState(null);
@@ -176,7 +176,7 @@ function UniversityDirectory() {
       ) : (
         <div className="ud-cards-grid">
           {filtered.map(dept => (
-            <DeptCard key={dept.id} dept={dept} />
+            <DeptCard key={dept.id} dept={dept} onRoute={onRoute} />
           ))}
         </div>
       )}
@@ -184,7 +184,7 @@ function UniversityDirectory() {
   );
 }
 
-function DeptCard({ dept }) {
+function DeptCard({ dept, onRoute }) {
   const meta = CATEGORY_META[dept.category] || CATEGORY_META.academic;
   return (
     <div className="ud-dept-card glass-card">
@@ -215,7 +215,7 @@ function DeptCard({ dept }) {
       {/* Footer: Dean + Route */}
       <div className="ud-card-footer">
         <span className="ud-dean-name">{dept.dean}</span>
-        <button className="ud-route-btn">
+        <button className="ud-route-btn" onClick={() => onRoute && onRoute(dept.building)}>
           <span>✈</span> Route
         </button>
       </div>
