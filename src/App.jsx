@@ -70,7 +70,7 @@ export default function App() {
     };
 
     const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    const matchedUser = (email === 'student@chitkara.edu.in' && password === 'password123')
+    const matchedUser = (email === 'student@chitkara.edu.in' && password === 'password12345')
       ? demoUser
       : existingUsers.find(u => u.email === email && u.password === password);
 
